@@ -19,7 +19,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/admin', [MRoomController::class, 'index'])->middleware(['auth', 'verified'])->name('admin');
+Route::get('/admin', [MRoomController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('admin');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

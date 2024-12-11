@@ -28,30 +28,31 @@ class MRoomController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        $request->validate([
-            'room_name'=>'required',
-            'room_description'=>'required',
-            'room_price'=>'required',
-            'room_picture' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:5120'
-        ]);
+{
+    $request->validate([
+        'room_name' => 'required',
+        'room_description' => 'required',
+        'room_price' => 'required|numeric',
+        'room_picture' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:5120'
+    ]);
 
-        $imageName = null;
+    $imageName = null;
 
-        if($request->hasFile('room_picture')){
-            $imageName = time().'.'.$request->image->extension();
-            $request->image->move(public_path('pictures'), $imageName);
-        }
-
-        M_room::create([
-            'room_name'=>$request->room_name,
-            'room_description'=>$request->room_description,
-            'room_price'=>$request->room_price,
-            'room_picture'=>$request->$imageName
-        ]);
-
-        return redirect()->route('admin.index')->with('room has successfully added');
+    if ($request->hasFile('room_picture')) {
+        $imageName = time() . '.' . $request->room_picture->extension();
+        $request->room_picture->move(public_path('pictures'), $imageName);
     }
+
+    M_room::create([
+        'room_name' => $request->room_name,
+        'room_description' => $request->room_description,
+        'room_price' => $request->room_price,
+        'room_picture' => $imageName,
+    ]);
+
+    return redirect()->route('admin')->with('success', 'Ruangan berhasil ditambahkan!');
+}
+
 
     /**
      * Display the specified resource.
@@ -97,12 +98,12 @@ class MRoomController extends Controller
      */
     public function destroy($id)
     {
-        $rooms = M_room::where('id_product', $id)->firstOrFail();
-        if ($rooms->image && file_exists(public_path('images/' . $rooms->image))) {
-            unlink(public_path('images/' . $rooms->image));
+        $rooms = M_room::where('id_room', $id)->firstOrFail();
+        if ($rooms->room_picture && file_exists(public_path('images/' . $rooms->room_picture))) {
+            unlink(public_path('images/' . $rooms->room_picture));
         }
         $rooms->delete();
-        return redirect()->route('admin.index')->with('produk berhasil dihapus');
+        return redirect()->route('admin')->with('produk berhasil dihapus');
     
     }
 }

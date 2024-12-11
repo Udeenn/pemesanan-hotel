@@ -30,7 +30,7 @@
                         <td>{{ $room->room_name }}</td>
                         <td>{{ $room->room_description }}</td>
                         <td>Rp {{ number_format($room->room_price, 0, ',', '.') }}</td>
-                        <td><img src="{{ asset('images/' . $room->image) }}" alt="room Image" width="50"></td>
+                        <td><img src="{{ asset('pictures/' . $room->room_picture) }}" alt="room Image" width="50"></td>
                         <td>
                             <a href="{{ route('admin.edit', $room->id_room) }}" class="btn btn-warning">Edit</a>
                             <form action="{{ route('admin.destroy', $room->id_room) }}" method="POST" style="display:inline;">
